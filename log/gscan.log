@@ -1,0 +1,178 @@
+begin scan current system security status ...
+host machine info 
+hostname：zivs-MacBook-Pro.local
+hostIP：172.20.10.2
+systemversion：Darwin-18.2.0-x86_64-i386-64bit
+hosttime：2019-06-19 16:32:53
+
+alias check
+ [1]alias check                         [ OK  ]
+
+begin file based scan
+ [1] system file hash compare           [ OK  ]
+ [2] system executable ingegrity        [ OK  ]
+ [3] tmp directory scan                 [ OK  ]
+ [4] user directory scan                [ OK  ]
+ [5] suspicious hidden file scan        [ OK  ]
+
+ begin history file scan 
+ [1] all history suspicious logs        [ OK  ]
+
+ begin process scan
+ [1] CPU and memory check               [ OK  ]
+ [2] hidden process scan                [ OK  ]
+ [3] reverse shell process scan         [ OK  ]
+ [4] malicious process scan             [ OK  ]
+ [5] exe process scan                   [ OK  ]
+
+begin network type scan
+ [1] network connection check (oversea) [ OK  ]
+ [2] net suspicious check               [ OK  ]
+ [3] network card promise mode check    [ Warning  ]
+------------------------------
+Network_Analysis
+{"checkname": "Network_Analysis", "vulname": "network promisc check", "file": "", "pid": "", "mtime": "", "user": "", "minfo": "promisc mode", "consult": "ifconfig | grep PROMISC | grep RUNNING", "level": "suspicious", "programme": "ifconfig eth0 -promisc #close promisc mode "}
+
+begin backdoor scan
+ [1] LD_PRELOAD backdoor check          [ OK  ]
+ [2] LD_AOUT_PRELOAD backdoor check     [ OK  ]
+ [3] LD_ELF_PRELOAD backdoor check      [ OK  ]
+ [4] LD_LIBRARY_PATH backdoor check     [ OK  ]
+ [5] ld.so.preload backdoor check       [ OK  ]
+ [6] PROMPT_COMMAND backdoor check      [ OK  ]
+ [7] cron job backdoor check            [ OK  ]
+ [8] unknown environment variable backdoor check[ OK  ]
+ [9] ssh backdoor check                 [ OK  ]
+ [10] SSH wrapper backdoor check        [ OK  ]
+ [11] inetd.conf backdoor check         [ OK  ]
+ [12] xinetd.conf backdoor check        [ OK  ]
+ [13] setuid backdoor check             [ Warning  ]
+ [14] system startup backdoor check     [ OK  ]
+------------------------------
+Backdoor_Analysis
+{"checkname": "Backdoor_Analysis", "vulname": "setuid backdoor", "file": "/Library/Internet Plug-Ins/F5 SSL VPN Plugin.plugin/Contents/Helpers/svpn", "pid": "", "mtime": "2018-12-01 12:04:06", "user": "root", "minfo": "file /Library/Internet Plug-Ins/F5 SSL VPN Plugin.plugin/Contents/Helpers/svpn have setuid，shoule be root permission only", "consult": "[1]ls -l /Library/Internet Plug-Ins/F5 SSL VPN Plugin.plugin/Contents/Helpers/svpn", "level": "risk", "programme": "chmod u-s /Library/Internet Plug-Ins/F5 SSL VPN Plugin.plugin/Contents/Helpers/svpn #disable setuid permission"}
+{"checkname": "Backdoor_Analysis", "vulname": "setuid backdoor", "file": "/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/MacOS/ARDAgent", "pid": "", "mtime": "2019-02-05 13:31:51", "user": "root", "minfo": "file /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/MacOS/ARDAgent have setuid，shoule be root permission only", "consult": "[1]ls -l /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/MacOS/ARDAgent", "level": "risk", "programme": "chmod u-s /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/MacOS/ARDAgent #disable setuid permission"}
+egin account type scan
+ [1]root permission scan                [ OK  ]
+ [2]null password scan                  [ OK  ]
+ [3]sudoers permission scan             [ OK  ]
+ [4]check_authorized_keys               [ OK  ]
+ [5]passwd_file_analysis                [ OK  ]
+
+ begin log scan
+ [1] ssh log check                      [ OK  ]
+ [2] wtmp check                         [ OK  ]
+ [3] utmp check                         [ OK  ]
+ [4] lastlog check                      [ OK  ]
+
+ begin DNS Firewall hosts setting scan
+ [1] DNS settig scan                    [ OK  ]
+ [2] firewall setting scan              [ OK  ]
+ [3] hosts setting scan                 [ OK  ]
+
+begin Rootkit scan
+ [1]55808 Variant A                     [ OK  ]
+ [2]Adore Rootkit                       [ OK  ]
+ [3]AjaKit Rootkit                      [ OK  ]
+ [4]aPa Kit Rootkit                     [ OK  ]
+ [5]Apache Worm                         [ OK  ]
+ [6]Ambient Rootkit                     [ OK  ]
+ [7]Balaur Rootkit                      [ OK  ]
+ [8]Beastkit Rootkit                    [ OK  ]
+ [9]beX2 Rootkit                        [ OK  ]
+ [10]BOBkit Rootkit                     [ OK  ]
+ [11]OSX Boonana-A Trojan               [ OK  ]
+ [12]cb Rootkit                         [ OK  ]
+ [13]CiNIK Worm                         [ OK  ]
+ [14]CX Rootkit                         [ OK  ]
+ [15]Abuse Kit                          [ OK  ]
+ [16]Devil Rootkit                      [ OK  ]
+ [17]Diamorphine LKM                    [ OK  ]
+ [18]Dica-Kit Rootkit                   [ OK  ]
+ [19]Dreams Rootkit                     [ OK  ]
+ [20]Duarawkz Rootkit                   [ OK  ]
+ [21]Ebury sshd backdoor                [ OK  ]
+ [22]ENYE LKM                           [ OK  ]
+ [23]Flea Rootkit                       [ OK  ]
+ [24]FreeBSD Rootkit                    [ OK  ]
+ [25]Fu Rootkit                         [ OK  ]
+ [26]Fuckit Rootkit                     [ OK  ]
+ [27]GasKit Rootkit                     [ OK  ]
+ [28]Heroin LKM                         [ OK  ]
+ [29]HjC Kit Rootkit                    [ OK  ]
+ [30]ignoKit Rootkit                    [ OK  ]
+ [31]iLLogiC Rootkit                    [ OK  ]
+ [32]OSX Inqtana Variant A              [ OK  ]
+ [33]OSX Inqtana Variant B              [ OK  ]
+ [34]OSX Inqtana Variant C              [ OK  ]
+ [35]IntoXonia-NG Rootkit               [ OK  ]
+ [36]Irix Rootkit                       [ OK  ]
+ [37]Jynx Rootkit                       [ OK  ]
+ [38]Jynx2 Rootkit                      [ OK  ]
+ [39]KBeast Rootkit                     [ OK  ]
+ [40]OSX Keydnap backdoor               [ OK  ]
+ [41]Kitko Rootkit                      [ OK  ]
+ [42]Knark Rootkit                      [ OK  ]
+ [43]OSX Komplex Trojan                 [ OK  ]
+ [44]ld-linuxv rootkit                  [ OK  ]
+ [45]Lion Worm                          [ OK  ]
+ [46]Lockit Rootkit                     [ OK  ]
+ [47]Mokes backdoor                     [ OK  ]
+ [48]MRK RootKit                        [ OK  ]
+ [49]Mood-NT Rootkit                    [ OK  ]
+ [50]Ni0 Rootkit                        [ OK  ]
+ [51]Ohhara Rootkit                     [ OK  ]
+ [52]Optic Kit Rootkit                  [ OK  ]
+ [53]OSXRK                              [ OK  ]
+ [54]Oz Rootkit                         [ OK  ]
+ [55]Phalanx Rootkit                    [ OK  ]
+ [56]Phalanx2 Rootkit                   [ OK  ]
+ [57]Portacelo Rootkit                  [ OK  ]
+ [58]OSX Proton backdoor                [ OK  ]
+ [59]R3dstorm Toolkit                   [ OK  ]
+ [60]RH-Sharpe Rootkit                  [ OK  ]
+ [61]RSHA Rootkit                       [ OK  ]
+ [62]Shutdown Rootkit                   [ OK  ]
+ [63]Scalper Worm                       [ OK  ]
+ [64]SHV4 Rootkit                       [ OK  ]
+ [65]SHV5 Rootkit                       [ OK  ]
+ [66]Sin Rootkit                        [ OK  ]
+ [67]Slapper Worm                       [ OK  ]
+ [68]Sneakin Rootkit                    [ OK  ]
+ [69]Solaris Wanuk backdoor             [ OK  ]
+ [70]Solaris Wanuk Worm                 [ OK  ]
+ [71]Spanish Rootkit                    [ OK  ]
+ [72]Suckit Rootkit                     [ OK  ]
+ [73]NSDAP Rootkit                      [ OK  ]
+ [74]SunOS Rootkit                      [ OK  ]
+ [75]Superkit Rootkit                   [ OK  ]
+ [76]TBD(Telnet Backdoor)               [ OK  ]
+ [77]TeLeKiT Rootkit                    [ OK  ]
+ [78]OSX Togroot Rootkit                [ OK  ]
+ [79]T0rn Rootkit                       [ OK  ]
+ [80]trNkit Rootkit                     [ OK  ]
+ [81]Trojanit Kit Rootkit               [ OK  ]
+ [82]Turtle Rootkit                     [ OK  ]
+ [83]Tuxtendo Rootkit                   [ OK  ]
+ [84]Universal Rootkit                  [ OK  ]
+ [85]VcKit Rootkit                      [ OK  ]
+ [86]Vampire Rootkit                    [ OK  ]
+ [87]Volc Rootkit                       [ OK  ]
+ [88]weaponX                            [ OK  ]
+ [89]Xzibit Rootkit                     [ OK  ]
+ [90]X-Org SunOS Rootkit                [ OK  ]
+ [91]zaRwT.KiT Rootkit                  [ OK  ]
+ [92]ZK Rootkit                         [ OK  ]
+ [93]Miscellaneous login backdoors      [ OK  ]
+ [94]Sniffer log                        [ OK  ]
+ [95]Suspicious dir                     [ OK  ]
+ [96]Apache backdoor                    [ OK  ]
+ [97]check LKM                          [ OK  ]
+
+open Webshell scan
+ [1]Webshell scan                       [ skip  ]
+------------------------------
+After analysis, the attack will be ：
+[1][suspicious] hacker in unknown，promisc mode
+[2][risk] hacker in 2018-12-01 12:04:06，do setuid backdoor implant,file /Library/Internet Plug-Ins/F5 SSL VPN Plugin.plugin/Contents/Helpers/svpn have setuid，shoule be root permission only
+[3][risk] hacker in 2019-02-05 13:31:51，do setuid backdoor implant,file /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/MacOS/ARDAgent have setuid，shoule be root permission only

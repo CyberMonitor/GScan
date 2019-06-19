@@ -121,7 +121,7 @@ if __name__ == '__main__':
     options, _ = parser.parse_args()
     options.file = 'secure'
     if options.dir or options.file:
-        print(u'存在爆破且成功的信息：')
+        print(u'exploit success data exist：')
         print(SSH_Analysis(log=options.file, log_dir=options.dir).correct_baopo_infos)
     else:
         parser.print_help()

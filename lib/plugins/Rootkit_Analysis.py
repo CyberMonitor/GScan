@@ -13,7 +13,7 @@ from lib.core.common import *
 
 class Rootkit_Analysis:
     def __init__(self):
-        self.name = u'Rootkit类安全检测'
+        self.name = u'Rootkit type scan'
         # 恶意rootkit输出
         self.rootkit = []
         # 集合内核符号表
@@ -689,15 +689,15 @@ class Rootkit_Analysis:
             for file in rootkit_info['file']:
                 if os.path.exists(file):
                     malice_result(self.name, rootkit_info['name'], file, '',
-                                  u'匹配到名为%s的rootkit文件规则 %s' % (rootkit_info['name'], file),
-                                  u'[1]strings %s' % file, u'风险', programme=u'rm %s #删除rootkit恶意文件' % file)
+                                  u'match %s rootkit: rule %s' % (rootkit_info['name'], file),
+                                  u'[1]strings %s' % file, u'risk', programme=u'rm %s #delete rootkit file' % file)
                     malice = True
                     return suspicious, malice
             for dir in rootkit_info['dir']:
                 if os.path.exists(dir):
                     malice_result(self.name, rootkit_info['name'], dir, '',
-                                  u'匹配到名为%s的rootkit目录规则 %s' % (rootkit_info['name'], dir), u'[1]ls -a %s' % dir, u'风险',
-                                  programme=u'rm -rf %s #删除rootkit恶意文件' % dir)
+                                  u'match %s rootkit dir %s' % (rootkit_info['name'], dir), u'[1]ls -a %s' % dir, u'risk',
+                                  programme=u'rm -rf %s #delete rootkit file' % dir)
                     malice = True
                     return suspicious, malice
 
@@ -706,8 +706,8 @@ class Rootkit_Analysis:
                 for ksyms in rootkit_info['ksyms']:
                     if ksyms in kms:
                         malice_result(self.name, rootkit_info['name'], '/proc/kallsyms', '',
-                                      u'匹配到名为 %s 的rootkit内核符合表特征 %s' % (rootkit_info['name'], ksyms),
-                                      u'[1]cat /proc/kallsyms', u'风险')
+                                      u'match %s rootkit kernel signature  %s' % (rootkit_info['name'], ksyms),
+                                      u'[1]cat /proc/kallsyms', u'risk')
                         malice = True
                         return suspicious, malice
             return suspicious, malice
@@ -724,8 +724,8 @@ class Rootkit_Analysis:
             for file in infos:
                 for lkm in self.LKM_BADNAMES:
                     if lkm == os.path.basename(file):
-                        malice_result(self.name, u'LKM内核模块检测', file, '', u'匹配文件 %s 具备恶意特征 %s' % (file, lkm),
-                                      u'[1]cat /proc/kallsyms', u'风险', programme=u'rm %s #删除rootkit恶意文件' % file)
+                        malice_result(self.name, u'LKM', file, '', u'match %s have malicious signature  %s' % (file, lkm),
+                                      u'[1]cat /proc/kallsyms', u'risk', programme=u'rm %s #delete rootkit file' % file)
                         malice = True
                         return suspicious, malice
             return suspicious, malice
@@ -733,8 +733,8 @@ class Rootkit_Analysis:
             return suspicious, malice
 
     def run(self):
-        print(u'\n开始Rootkit类安全扫描')
-        file_write(u'\n开始Rootkit类安全扫描\n')
+        print(u'\nbegin Rootkit scan')
+        file_write(u'\nbegin Rootkit scan\n')
 
         i = 0
         for rootkit_info in self.rootkit_rules:
@@ -743,7 +743,7 @@ class Rootkit_Analysis:
             suspicious, malice = self.check_rootkit_rules(rootkit_info)
             result_output_tag(suspicious, malice)
 
-        string_output(u' [%d]检测LKM内核模块' % (i + 1))
+        string_output(u' [%d]check LKM' % (i + 1))
         suspicious, malice = self.check_bad_LKM()
         result_output_tag(suspicious, malice)
 

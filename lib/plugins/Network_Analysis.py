@@ -16,7 +16,7 @@ class Network_Analysis:
         # 可疑网络连接列表
         # 远程ip、远程端口、可疑描述
         self.network_malware = []
-        self.name = u'网络链接类安全检测'
+        self.name = u'Network_Analysis'
         self.port_malware = [
             {'protocol': 'tcp', 'port': '1524', 'description': 'Possible FreeBSD (FBRK) Rootkit backdoor'},
             {'protocol': 'tcp', 'port': '1984', 'description': 'Fuckit Rootkit'},
@@ -56,9 +56,9 @@ class Network_Analysis:
                 remote_ip, remote_port = netinfo[1].replace("\n", "").split(":")
                 pid, pname = netinfo[2].replace("\n", "").split("/")
                 if check_ip(ip):
-                    malice_result(self.name, u'境外IP网络链接', '', pid,
-                                  u'进程 %s 境外IP %s 通过%s于主机建立链接' % (pname, remote_ip, protocol), u'[1]netstat -ano',
-                                  u'可疑', programme=u'kill %s #关闭异常链接进程' % pid)
+                    malice_result(self.name, u'oversea IP connection', '', pid,
+                                  u'process %s oversea IP %s via %s connection' % (pname, remote_ip, protocol), u'[1]netstat -ano',
+                                  u'suspicious', programme=u'kill %s #kill process' % pid)
                     suspicious = True
             return suspicious, malice
         except:
@@ -77,9 +77,9 @@ class Network_Analysis:
                 pid, pname = netinfo[2].replace("\n", "").split("/")
                 for malware in self.port_malware:
                     if malware['port'] == remote_port:
-                        malice_result(self.name, u'可疑端口的链接', '', pid, u'进程%s 主机链接了远程IP%s的可疑的端口%s，此端口通常被用于%s' % (
-                            pname, remote_ip, remote_port, malware['description']), u'[1]netstat -ano', u'可疑',
-                                      programme=u'kill %s #关闭异常链接进程' % pid)
+                        malice_result(self.name, u'suspicious port ', '', pid, u'process %s connect IP%s port %s，this port common used in %s' % (
+                            pname, remote_ip, remote_port, malware['description']), u'[1]netstat -ano', u'suspicious',
+                                      programme=u'kill %s #kill process' % pid)
                         suspicious = True
             return suspicious, malice
         except:
@@ -91,26 +91,26 @@ class Network_Analysis:
         try:
             shell_process = os.popen("ifconfig 2>/dev/null| grep PROMISC | grep RUNNING").read().splitlines()
             if len(shell_process) > 0:
-                malice_result(self.name, u'网卡混杂模式检测', '', '', u'网卡开启混杂模式', u'ifconfig | grep PROMISC | grep RUNNING',
-                              u'可疑', programme=u'ifconfig eth0 -promisc #关闭网卡混杂模式')
+                malice_result(self.name, u'network promisc check', '', '', u'promisc mode', u'ifconfig | grep PROMISC | grep RUNNING',
+                              u'suspicious', programme=u'ifconfig eth0 -promisc #close promisc mode ')
                 suspicious = True
             return suspicious, malice
         except:
             return suspicious, malice
 
     def run(self):
-        print(u'\n开始网络链接类安全扫描')
-        file_write(u'\n开始网络链接类安全扫描\n')
+        print(u'\n begin network type scan ')
+        file_write(u'\nbegin network type scan\n')
 
-        string_output(u' [1]当前网络对外连接扫描')
+        string_output(u' [1] network connection check (oversea) ')
         suspicious, malice = self.check_network_abroad()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [2]恶意特征类链接扫描')
+        string_output(u' [2] net suspicious check ')
         suspicious, malice = self.check_net_suspicious()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [3]网卡混杂模式扫描')
+        string_output(u' [3] network card promise mode check')
         suspicious, malice = self.check_promisc()
         result_output_tag(suspicious, malice)
 
@@ -121,6 +121,6 @@ class Network_Analysis:
 if __name__ == '__main__':
     infos = Network_Analysis()
     infos.run()
-    print(u"可疑网络连接：")
+    print(u"suspicious network：")
     for info in infos.network_malware:
         print(info)

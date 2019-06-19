@@ -5,8 +5,6 @@ import os, platform, sys, glob
 from subprocess import Popen, PIPE
 
 
-# 作者：咚咚呛
-# 版本：v0.1
 # 功能：根据本机的web服务，提取web的根目录，供后续webshell扫描使用
 # nginx
 # 1、进程名称中出现-c 跟配置文件

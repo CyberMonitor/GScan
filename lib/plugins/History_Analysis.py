@@ -14,7 +14,7 @@ class History_Analysis:
     def __init__(self):
         # 恶意操作
         self.history = []
-        self.name = u'主机历史操作类安全检测'
+        self.name = u'History_Analysis'
 
     # 获取所有用户下的操作记录，是否存在恶意ip
     def get_all_history(self):
@@ -33,8 +33,8 @@ class History_Analysis:
                             for line in f:
                                 contents = analysis_strings(line)
                                 if not contents: continue
-                                malice_result(self.name, u'history文件安全扫描', file, '', contents, u'[1]cat %s' % file,
-                                              u'风险')
+                                malice_result(self.name, u'history file scan', file, '', contents, u'[1]cat %s' % file,
+                                              u'risk')
                                 malice = True
                 # 文件类，进行文件的操作分析
                 else:
@@ -42,17 +42,17 @@ class History_Analysis:
                         for line in f:
                             contents = analysis_strings(line)
                             if not contents: continue
-                            malice_result(self.name, u'history文件安全扫描', file, '', contents, u'[1]cat %s' % file, u'风险')
+                            malice_result(self.name, u'history file scan', file, '', contents, u'[1]cat %s' % file, u'risk')
                             malice = True
             return suspicious, malice
         except:
             return suspicious, malice
 
     def run(self):
-        print(u'\n开始主机历史操作类安全扫描')
-        file_write(u'\n开始主机历史操作类安全扫描\n')
+        print(u'\n begin history file scan ')
+        file_write(u'\n begin history file scan \n')
 
-        string_output(u' [1]所有历史操作的可疑记录')
+        string_output(u' [1] all history suspicious logs')
         suspicious, malice = self.get_all_history()
         result_output_tag(suspicious, malice)
 

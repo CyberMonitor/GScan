@@ -21,7 +21,7 @@ class Proc_Analysis:
         self.cpu, self.mem = cpu, mem
         # 可疑的进程列表
         self.process_backdoor = []
-        self.name = u'进程类安全检测'
+        self.name = u'Proc_Analysis'
 
     # 判断进程的可执行文件是否具备恶意特征
     def exe_analysis(self):
@@ -35,9 +35,9 @@ class Proc_Analysis:
                     malware = analysis_file(filepath)
                     if malware:
                         lnstr = os.readlink(filepath)
-                        malice_result(self.name, u'exe程序进程安全扫描', lnstr, file, malware,
-                                      u'[1]ls -a %s [2]strings %s' % (filepath, filepath), u'风险',
-                                      programme=u'kill %s #关闭恶意进程' % lnstr)
+                        malice_result(self.name, u'exe process scan', lnstr, file, malware,
+                                      u'[1]ls -a %s [2]strings %s' % (filepath, filepath), u'risk',
+                                      programme=u'kill %s #kill malicious process' % lnstr)
                         malice = True
             return suspicious, malice
         except:
@@ -54,9 +54,9 @@ class Proc_Analysis:
             for pro in process:
                 pro_info = pro.strip().split(' ', 3)
                 if check_shell(pro_info[3]):
-                    malice_result(self.name, u'反弹shell类进程安全扫描', '', pro_info[1],
-                                  u'对应进程信息：%s' % pro_info[3].replace("\n", ""),
-                                  u'[1]ps -efwww', u'风险', programme=u'kill %s #关闭恶意进程' % pro_info[1])
+                    malice_result(self.name, u'reverse shell process scan', '', pro_info[1],
+                                  u'process：%s' % pro_info[3].replace("\n", ""),
+                                  u'[1]ps -efwww', u'risk', programme=u'kill %s #kill malicious process' % pro_info[1])
                     malice = True
             return suspicious, malice
         except:
@@ -81,15 +81,15 @@ class Proc_Analysis:
                 pro_info = pro.strip().split(' ', 4)
                 # cpu使用超过标准
                 if float(pro_info[2]) > self.cpu:
-                    malice_result(self.name, u'CPU过载扫描', '', pro_info[1],
-                                  u'进程使用CPU过大，对应进程信息：%s' % pro_info[4].replace("\n", ""),
-                                  u'[1]ps -efwww', u'风险', programme=u'kill %s #关闭恶意进程' % pro_info[1])
+                    malice_result(self.name, u'CPU overload scan', '', pro_info[1],
+                                  u'process use CPU too much，process：%s' % pro_info[4].replace("\n", ""),
+                                  u'[1]ps -efwww', u'risk', programme=u'kill %s #kill malicious process' % pro_info[1])
                     suspicious = True
                 # 内存使用超过标准
                 if float(pro_info[3]) > self.mem:
-                    malice_result(self.name, u'内存过载扫描', '', pro_info[1],
-                                  u'进程使用内存过大，对应进程信息：%s' % pro_info[4].replace("\n", ""),
-                                  u'[1]ps -efwww', u'风险', programme=u'kill %s #关闭恶意进程' % pro_info[1])
+                    malice_result(self.name, u'memory overload scan ', '', pro_info[1],
+                                  u'process use too much memory ，process：%s' % pro_info[4].replace("\n", ""),
+                                  u'[1]ps -efwww', u'risk', programme=u'kill %s #kill malicious process' % pro_info[1])
                     suspicious = True
             return suspicious, malice
         except:
@@ -113,9 +113,9 @@ class Proc_Analysis:
             hids_pid = list(set(pid_pro_file).difference(set(pid_process)))
             if len(hids_pid) > 10: return suspicious, malice
             for pid in hids_pid:
-                malice_result(self.name, u'隐藏进程扫描', '', pid, u'进程ID %s 隐藏了进程信息，未出现在进程列表中' % pid,
+                malice_result(self.name, u'hidden process scan', '', pid, u'process ID %s hidden and not show in process list' % pid,
                               u"[1] cat /proc/$$/mountinfo [2] umount /proc/%s [3]ps -ef |grep %s" % (pid, pid), u'风险',
-                              programme=u'umount /proc/%s & kill %s #关闭隐藏进程并结束进程' % (pid, pid))
+                              programme=u'umount /proc/%s & kill %s #kill process' % (pid, pid))
                 malice = True
             return suspicious, malice
         except:
@@ -132,34 +132,34 @@ class Proc_Analysis:
             process = p4.stdout.read().splitlines()
             for pro in process:
                 pro_info = pro.strip().split(' ', 3)
-                malice_result(self.name, u'可疑进程信息扫描', '', pro_info[1], pro_info[3].replace("\n", ""), u'[1]ps -efwww',
-                              u'风险', programme=u'kill %s #关闭恶意进程' % pro_info[1])
+                malice_result(self.name, u'suspicious process scan', '', pro_info[1], pro_info[3].replace("\n", ""), u'[1]ps -efwww',
+                              u'风险', programme=u'kill %s #kill suspicious process' % pro_info[1])
                 suspicious = True
             return suspicious, malice
         except:
             return suspicious, malice
 
     def run(self):
-        print(u'\n开始进程类安全扫描')
-        file_write(u'\n开始进程类安全扫描\n')
+        print(u'\n begin process scan')
+        file_write(u'\n begin process scan\n')
 
-        string_output(u' [1]CUP和内存类异常进程排查')
+        string_output(u' [1] CPU and memory check')
         suspicious, malice = self.work_analysis()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [2]隐藏进程安全扫描')
+        string_output(u' [2] hidden process scan ')
         suspicious, malice = self.check_hide_pro()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [3]反弹shell类进程扫描')
+        string_output(u' [3] reverse shell process scan ')
         suspicious, malice = self.shell_analysis()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [4]恶意进程信息安全扫描')
+        string_output(u' [4] malicious process scan ')
         suspicious, malice = self.keyi_analysis()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [5]exe程序安全扫描')
+        string_output(u' [5] exe process scan ')
         suspicious, malice = self.exe_analysis()
         result_output_tag(suspicious, malice)
 

@@ -5,16 +5,13 @@ import os
 from lib.core.common import *
 
 
-# 作者：咚咚呛
-# 系统初始化检测
-# 1、文件alias配置检测
 
 
 class SYS_INIT:
     def __init__(self):
         # 异常信息
         self.backdoor_info = []
-        self.name = u'系统初始化检测'
+        self.name = u'SYS_INIT'
 
     def check_alias_conf(self):
         suspicious, malice = False, False
@@ -52,18 +49,18 @@ class SYS_INIT:
                     if line[:5] == 'alias':
                         for syscmd in syscmds:
                             if 'alias ' + syscmd + '=' in line:
-                                malice_result(self.name, u'初始化alias检查', file, '', u'存在可疑的alias的设置：%s' % line,
-                                              u'[1]alias [2]cat %s' % file, u'可疑', programme=u'vi %s #删除alias恶意配置' % file)
+                                malice_result(self.name, u'initial alias check', file, '', u'exist suspicious alias：%s' % line,
+                                              u'[1]alias [2]cat %s' % file, u'suspicious', programme=u'vi %s #delete alias suspicious setting' % file)
                                 suspicious = True
             return suspicious, malice
         except:
             return suspicious, malice
 
     def run(self):
-        print(u'\n检测系统初始化扫描')
-        file_write(u'\n检测系统初始化扫描\n')
+        print(u'\nalias check')
+        file_write(u'\nalias check\n')
 
-        string_output(u' [1]alias检查')
+        string_output(u' [1]alias check')
         suspicious, malice = self.check_alias_conf()
         result_output_tag(suspicious, malice)
 

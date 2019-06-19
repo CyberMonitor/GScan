@@ -37,13 +37,13 @@ class Host_Info:
             s.close()
 
     def run(self):
-        print(u'\n主机信息获取')
-        print(u'主机名：%s' % self.hostname)
-        print(u'主机IP：%s' % self.ip)
-        print(u'系统版本：%s' % self.version)
-        print(u'主机时间：%s' % self.time)
+        print(u'\nhost machine info ')
+        print(u'host name：%s' % self.hostname)
+        print(u'host IP：%s' % self.ip)
+        print(u'system version：%s' % self.version)
+        print(u'host current time ：%s' % self.time)
         sys.stdout.flush()
-        file_write(u'主机信息获取\n主机名：%s\n主机IP：%s\n系统版本：%s\n主机时间：%s\n' % (self.hostname, self.ip, self.version, self.time))
+        file_write(u'host machine info \nhostname：%s\nhostIP：%s\nsystemversion：%s\nhosttime：%s\n' % (self.hostname, self.ip, self.version, self.time))
 
 
 if __name__ == '__main__':

@@ -79,55 +79,55 @@ class Data_Aggregation:
             # 根据时间排序
             self.result_infos.sort(key=operator.itemgetter('mtime'))
             for result_info in self.result_infos:
-                if result_info['checkname'] == u'常规后门检测':
+                if result_info['checkname'] == u'Backdoor_Analysis':
                     say_info += u"[%d][%s] hacker in %s，do %s implant,%s\n" % (
                         i, result_info['level'], result_info['mtime'] if result_info['mtime'] else 'unknown',
                         result_info['vulname'], result_info['minfo'])
                     if suggestion: say_info = say_info + "           suggestion：%s\n" % result_info['consult']
                     if programme and result_info['programme']: programme_info += u"[%d] %s\n" % (i, result_info['programme'])
-                if result_info['checkname'] == u'配置类安全检测':
+                if result_info['checkname'] == u'Config_Analysis':
                     say_info += u"[%d][%s] hacker in %s，do %s change，%s\n" % (
                         i, result_info['level'], result_info['mtime'] if result_info['mtime'] else 'unknown',
                         result_info['vulname'], result_info['minfo'])
                     if suggestion: say_info = say_info + u"           suggestion：%s\n" % result_info['consult']
                     if programme and result_info['programme']: programme_info += u"[%d] %s\n" % (i, result_info['programme'])
-                if result_info['checkname'] == u'文件类安全检测':
+                if result_info['checkname'] == u'File_Analysis':
                     say_info += u"[%d][%s] hacker in %s，implant file %s，%s\n" % (
                         i, result_info['level'], result_info['mtime'] if result_info['mtime'] else 'unknown',
                         result_info['file'], result_info['minfo'])
                     if suggestion: say_info = say_info + u"           suggestion：：%s\n" % result_info['consult']
                     if programme and result_info['programme']: programme_info += u"[%d] %s\n" % (i, result_info['programme'])
-                if result_info['checkname'] == u'主机历史操作类安全检测':
+                if result_info['checkname'] == u'History_Analysis':
                     say_info += u"[%d][%s] hacker in %s，do malicious operation，%s\n" % (
                         i, result_info['level'], result_info['mtime'] if result_info['mtime'] else 'unknown',
                         result_info['minfo'])
                     if suggestion: say_info = say_info + u"           suggestion：%s\n" % result_info['consult']
                     if programme and result_info['programme']: programme_info += u"[%d] %s\n" % (i, result_info['programme'])
-                if result_info['checkname'] == u'日志类安全检测':
+                if result_info['checkname'] == u'Log_Analysis':
                     say_info += u"[%d][%s] hacker in %s，user %s login，%s\n" % (
                         i, result_info['level'], result_info['mtime'] if result_info['mtime'] else 'unknown',
                         result_info[u'所属用户'], result_info['minfo'])
                     if suggestion: say_info = say_info + u"           suggestion：%s\n" % result_info['consult']
                     if programme and result_info['programme']: programme_info += u"[%d] %s\n" % (i, result_info['programme'])
-                if result_info['checkname'] == u'网络链接类安全检测':
+                if result_info['checkname'] == u'Network_Analysis':
                     say_info += u"[%d][%s] hacker in %s，%s\n" % (
                         i, result_info['level'], result_info['mtime'] if result_info['mtime'] else 'unknown',
                         result_info['minfo'])
                     if suggestion: say_info = say_info + u"           suggestion：%s\n" % result_info['consult']
                     if programme and result_info['programme']: programme_info += u"[%d] %s\n" % (i, result_info['programme'])
-                if result_info['checkname'] == u'进程类安全检测':
+                if result_info['checkname'] == u'Proc_Analysis':
                     say_info += u"[%d][%s] hacker in %s，run process %s，%s\n" % (
                         i, result_info['level'], result_info['mtime'] if result_info['mtime'] else 'unknown',
                         result_info['pid'], result_info['minfo'])
                     if suggestion: say_info = say_info + u"           suggestion：%s\n" % result_info['consult']
                     if programme and result_info['programme']: programme_info += u"[%d] %s\n" % (i, result_info['programme'])
-                if result_info['checkname'] == u'Rootkit类安全检测':
+                if result_info['checkname'] == u'Rootkit type scan':
                     say_info += u"[%d][%s] hack in %s，implant Rootkit backdoor，%s\n" % (
                         i, result_info['level'], result_info['mtime'] if result_info['mtime'] else 'unknown',
                         result_info['minfo'])
                     if suggestion: say_info = say_info + u"           suggestion：%s\n" % result_info['consult']
                     if programme and result_info['programme']: programme_info += u"[%d] %s\n" % (i, result_info['programme'])
-                if result_info['checkname'] == u'系统初始化检测':
+                if result_info['checkname'] == u'SYS_INIT':
                     say_info += u"[%d][%s] hacker in %s，setting system alias ，%s\n" % (
                         i, result_info['level'], result_info['mtime'] if result_info['mtime'] else 'unknown',
                         result_info['minfo'])

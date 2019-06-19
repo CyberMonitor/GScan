@@ -1,7 +1,5 @@
 # -*- coding: utf8 -*-
-# author：  咚咚呛
-# 对系统重要文件夹进行监控，并把修改、创建的文件进行日志打印，
-# 排除prelink服务对二进制文件修改对结果进行干扰，每次排查都会排除prelink的操作
+
 from __future__ import print_function
 import os, sys, hashlib
 from lib.core.globalvar import *

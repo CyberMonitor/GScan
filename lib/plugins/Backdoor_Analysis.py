@@ -7,30 +7,31 @@ from subprocess import Popen, PIPE
 
 
 # 作者：咚咚呛
-# 常规类后门检测
-# 1、LD_PRELOAD后门检测
-# 2、LD_AOUT_PRELOAD后门检测
-# 3、LD_ELF_PRELOAD后门检测
-# 4、LD_LIBRARY_PATH后门检测
-# 5、ld.so.preload后门检测
-# 6、PROMPT_COMMAND后门检测
-# 7、cron后门检测
-# 8、alias后门
-# 9、ssh后门 ln -sf /usr/sbin/sshd /tmp/su; /tmp/su -oPort=5555;
-# 10、SSH Server wrapper 后门，替换/user/sbin/sshd 为脚本文件
-# 11、/etc/inetd.conf 后门
-# 12、/etc/xinetd.conf/后门
-# 13、setuid类后门
-# 14、/etc/fstab类后门（待写）
-# 13、系统启动项后门检测
+# 常规类backdoor check
+# 1、LD_PRELOADbackdoor check
+# 2、LD_AOUT_PRELOADbackdoor check
+# 3、LD_ELF_PRELOADbackdoor check
+# 4、LD_LIBRARY_PATHbackdoor check
+# 5、ld.so.preloadbackdoor check
+# 6、PROMPT_COMMANDbackdoor check
+# 7、cronbackdoor check
+# 8、aliasbackdoor
+# 9、sshbackdoor ln -sf /usr/sbin/sshd /tmp/su; /tmp/su -oPort=5555;
+# 10、SSH Server wrapper backdoor，替换/user/sbin/sshd 为脚本文件
+# 11、/etc/inetd.conf backdoor
+# 12、/etc/xinetd.conf/backdoor
+# 13、setuid类backdoor
+# 14、/etc/fstab类backdoor（待写）
+# 13、系统启动项backdoor check
 
 
 class Backdoor_Analysis:
     def __init__(self):
-        # 异常后门列表
+        # 异常backdoor列表
         self.backdoor = []
+        self.name = 'Backdoor_Analysis'
 
-    # 检测配置文件是否存在恶意配置
+    #  check配置文件是否存在恶意配置
     def check_conf(self, tag, file, mode='only'):
         try:
             if not os.path.exists(file): return ""
@@ -48,7 +49,7 @@ class Backdoor_Analysis:
         except:
             return ""
 
-    # 检测所有环境变量，是否存在恶意配置
+    #  check所有环境变量，是否存在恶意配置
     def check_tag(self, name, tag, mode='only'):
         suspicious, malice = False, False
         try:
@@ -62,8 +63,8 @@ class Backdoor_Analysis:
                     file = os.path.join('%s%s%s' % ('/home/', dir, home_file))
                     info = self.check_conf(tag, file, mode)
                     if info:
-                        malice_result(u'常规后门检测', name, file, '', info, u'[1]echo $%s [2]cat %s' % (tag, file), u'可疑',
-                                      programme=u'vi %s #删除%s设置' % (file, tag))
+                        malice_result(self.name, name, file, '', info, u'[1]echo $%s [2]cat %s' % (tag, file), 'suspicious',
+                                      programme=u'vi %s #delete %s setting' % (file, tag))
                         suspicious = True
             # 检查系统目录的配置
             for file in files:
@@ -72,74 +73,74 @@ class Backdoor_Analysis:
                     for file in gci(file):
                         info = self.check_conf(tag, file, mode)
                         if info:
-                            malice_result(u'常规后门检测', name, file, '', info, u'[1]echo $%s [2]cat %s' % (tag, file),
-                                          u'可疑')
+                            malice_result(self.name, name, file, '', info, u'[1]echo $%s [2]cat %s' % (tag, file),
+                                          'suspicious')
                             suspicious = True
                 else:
                     info = self.check_conf(tag, file, mode)
                     if info:
-                        malice_result(u'常规后门检测', name, file, '', info, u'[1]echo $%s [2]cat %s' % (tag, file), u'可疑',
-                                      programme=u'vi %s #删除%s设置' % (file, tag))
+                        malice_result(self.name, name, file, '', info, u'[1]echo $%s [2]cat %s' % (tag, file), 'suspicious',
+                                      programme=u'vi %s #delete %s setting' % (file, tag))
                         suspicious = True
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # LD_PRELOAD后门检测
+    # LD_PRELOADbackdoor check
     def check_LD_PRELOAD(self):
         suspicious, malice = False, False
         try:
-            suspicious, malice = self.check_tag(u'LD_PRELOAD 后门', 'LD_PRELOAD')
+            suspicious, malice = self.check_tag(u'LD_PRELOAD backdoor', 'LD_PRELOAD')
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # LD_AOUT_PRELOAD后门检测
+    # LD_AOUT_PRELOADbackdoor check
     def check_LD_AOUT_PRELOAD(self):
         suspicious, malice = False, False
         try:
-            suspicious, malice = self.check_tag(u'LD_AOUT_PRELOAD 后门', 'LD_AOUT_PRELOAD')
+            suspicious, malice = self.check_tag(u'LD_AOUT_PRELOAD backdoor', 'LD_AOUT_PRELOAD')
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # LD_ELF_PRELOAD后门检测
+    # LD_ELF_PRELOADbackdoor check
     def check_LD_ELF_PRELOAD(self):
         suspicious, malice = False, False
         try:
-            suspicious, malice = self.check_tag(u'LD_ELF_PRELOAD 后门', 'LD_ELF_PRELOAD')
+            suspicious, malice = self.check_tag(u'LD_ELF_PRELOAD backdoor', 'LD_ELF_PRELOAD')
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # LD_LIBRARY_PATH后门检测
+    # LD_LIBRARY_PATHbackdoor check
     def check_LD_LIBRARY_PATH(self):
         suspicious, malice = False, False
         try:
-            suspicious, malice = self.check_tag(u'LD_LIBRARY_PATH 后门', 'LD_LIBRARY_PATH')
+            suspicious, malice = self.check_tag(u'LD_LIBRARY_PATH backdoor', 'LD_LIBRARY_PATH')
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # PROMPT_COMMAND后门检测
+    # PROMPT_COMMANDbackdoor check
     def check_PROMPT_COMMAND(self):
         suspicious, malice = False, False
         try:
-            suspicious, malice = self.check_tag(u'PROMPT_COMMAND 后门', 'PROMPT_COMMAND')
+            suspicious, malice = self.check_tag(u'PROMPT_COMMAND backdoor', 'PROMPT_COMMAND')
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # 未知环境变量后门
+    # 未知环境变量backdoor
     def check_export(self):
         suspicious, malice = False, False
         try:
-            suspicious, malice = self.check_tag(u'未知环境变量 后门', 'PATH', mode='all')
+            suspicious, malice = self.check_tag(u'unknown environment variable  backdoor', 'PATH', mode='all')
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # ld.so.preload后门检测
+    # ld.so.preloadbackdoor check
     def check_ld_so_preload(self):
         suspicious, malice = False, False
         try:
@@ -150,14 +151,14 @@ class Backdoor_Analysis:
                     if line[0] != '#':
                         content = analysis_strings(line)
                         if content:
-                            malice_result(u'常规后门检测', u'ld.so.preload 后门', '/etc/ld.so.preload', '', content,
-                                          '[1]cat /etc/ld.so.preload', u'风险', programme=u'vi ld.so.preload #删除所有so设置')
+                            malice_result(self.name, u'ld.so.preload backdoor', '/etc/ld.so.preload', '', content,
+                                          '[1]cat /etc/ld.so.preload', u'risk', programme=u'vi ld.so.preload #delete so setting')
                             malice = True
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # 分析cron定时任务后门
+    # 分析cron定时任务backdoor
     def check_cron(self):
         suspicious, malice = False, False
         try:
@@ -170,14 +171,14 @@ class Backdoor_Analysis:
                     for i in open(file, 'r'):
                         content = analysis_strings(i)
                         if content:
-                            malice_result(u'常规后门检测', u'cron 后门', file, '', content, '[1]cat %s' % file, u'风险',
-                                          programme=u'vi %s #删除定时任务设置' % file)
+                            malice_result(self.name, u'cron backdoor', file, '', content, '[1]cat %s' % file, u'risk',
+                                          programme=u'vi %s #delete malicious cron entry setting ' % file)
                             malice = True
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # 分析SSH后门
+    # 分析SSHbackdoor
     def check_SSH(self):
         suspicious, malice = False, False
         try:
@@ -187,30 +188,30 @@ class Backdoor_Analysis:
                 pid = info.split("/")[0]
                 if os.path.exists('/proc/%s/exe' % pid):
                     if 'sshd' in os.readlink('/proc/%s/exe' % pid):
-                        malice_result(u'常规后门检测', u'SSH 后门', u'/porc/%s/exe' % pid, pid, u"非22端口的sshd服务",
-                                      u'[1]ls -l /porc/%s [2]ps -ef|grep %s|grep -v grep' % (pid, pid), u'风险',
-                                      programme=u'kill %s #关闭异常sshd进程' % pid)
+                        malice_result(self.name, u'SSH backdoor', u'/porc/%s/exe' % pid, pid, u"none port 22 sshd",
+                                      u'[1]ls -l /porc/%s [2]ps -ef|grep %s|grep -v grep' % (pid, pid), u'risk',
+                                      programme=u'kill %s #kill malicious sshd process' % pid)
                         malice = True
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # 分析SSH Server wrapper 后门
+    # 分析SSH Server wrapper backdoor
     def check_SSHwrapper(self):
         suspicious, malice = False, False
         try:
             infos = os.popen("file /usr/sbin/sshd 2>/dev/null").read().splitlines()
             if not len(infos): return suspicious, malice
             if ('ELF' not in infos[0]) and ('executable' not in infos[0]):
-                malice_result(u'常规后门检测', u'SSHwrapper 后门', u'/usr/sbin/sshd', "", u"/usr/sbin/sshd被篡改,文件非可执行文件",
+                malice_result(self.name, u'SSHwrapper backdoor', u'/usr/sbin/sshd', "", u"/usr/sbin/sshd be modify",
                               u'[1]file /usr/sbin/sshd [2]cat /usr/sbin/sshd', u'风险',
-                              programme=u'rm /usr/sbin/sshd & yum -y install openssh-server & service sshd start #删除sshd异常文件，并重新安装ssh服务')
+                              programme=u'rm /usr/sbin/sshd & yum -y install openssh-server & service sshd start #delete sshd file ，reinstall ssh')
                 malice = True
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # 分析inetd后门
+    # 分析inetdbackdoor
     def check_inetd(self):
         suspicious, malice = False, False
         try:
@@ -219,14 +220,14 @@ class Backdoor_Analysis:
                 for line in f:
                     content = analysis_strings(line)
                     if content:
-                        malice_result(u'常规后门检测', u'inetd.conf 后门', u'/etc/inetd.conf', '', content,
-                                      u'[1]cat /etc/inetd.conf', u'风险', programme=u'vi /etc/inetd.conf #删除异常点')
+                        malice_result(self.name, u'inetd.conf backdoor', u'/etc/inetd.conf', '', content,
+                                      u'[1]cat /etc/inetd.conf', u'risk', programme=u'vi /etc/inetd.conf #delete malicious entry in inetd.conf')
                         malice = True
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # 分析xinetd后门
+    # 分析xinetdbackdoor
     def check_xinetd(self):
         suspicious, malice = False, False
         try:
@@ -236,29 +237,29 @@ class Backdoor_Analysis:
                     for line in f:
                         content = analysis_strings(line)
                         if content:
-                            malice_result(u'常规后门检测', u'xinetd.conf 后门', u'/etc/xinetd.conf', '', content,
-                                          u'[1]cat /etc/xinetd.conf', u'风险', programme=u'vi /etc/xinetd.conf #删除异常点')
+                            malice_result(self.name, u'xinetd.conf backdoor', u'/etc/xinetd.conf', '', content,
+                                          u'[1]cat /etc/xinetd.conf', u'risk', programme=u'vi /etc/xinetd.conf #delete malicious entry in xinetd.conf')
                             malice = True
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # 分析setuid后门后
+    # 分析setuidbackdoor后
     def check_setuid(self):
         suspicious, malice = False, False
         try:
             file_infos = os.popen(
                 "find / ! -path '/proc/*' -type f -perm -4000 2>/dev/null | grep -vE 'pam_timestamp_check|unix_chkpwd|ping|mount|su|pt_chown|ssh-keysign|at|passwd|chsh|crontab|chfn|usernetctl|staprun|newgrp|chage|dhcp|helper|pkexec|top|Xorg|nvidia-modprobe|quota|login|security_authtrampoline|authopen|traceroute6|traceroute|ps'").read().splitlines()
             for info in file_infos:
-                malice_result(u'常规后门检测', u'setuid 后门', info, '',
-                              u'文件%s 被设置setuid属性，通常此类被设置权限的文件执行后会给予普通用户root权限' % info, u'[1]ls -l %s' % info, u'风险',
-                              programme=u'chmod u-s %s #去掉setuid曲线' % info)
+                malice_result(self.name, u'setuid backdoor', info, '',
+                              u'file %s have setuid，shoule be root permission only ' % info, u'[1]ls -l %s' % info, u'risk',
+                              programme=u'chmod u-s %s #disable setuid permission' % info)
                 suspicious = True
             return suspicious, malice
         except:
             return suspicious, malice
 
-    # 系统启动项检测
+    # 系统启动项 check
     def check_startup(self):
         suspicious, malice = False, False
         try:
@@ -269,82 +270,82 @@ class Backdoor_Analysis:
                 if os.path.isfile(path):
                     content = analysis_file(path)
                     if content:
-                        malice_result(u'常规后门检测', u'系统启动项后门', path, '', content, u'[1]cat %s' % path, u'风险',
-                                      programme=u'vi %s #删除异常点' % path)
+                        malice_result(self.name, u'system startup backdoor', path, '', content, u'[1]cat %s' % path, u'risk',
+                                      programme=u'vi %s #delete malicious entry' % path)
                         malice = True
                     continue
                 for file in gci(path):
                     content = analysis_file(file)
                     if content:
-                        malice_result(u'常规后门检测', u'系统启动项后门', path, '', content, u'[1]cat %s' % path, u'风险',
-                                      programme=u'vi %s #删除异常点' % path)
+                        malice_result(self.name, u'system startup backdoor', path, '', content, u'[1]cat %s' % path, u'risk',
+                                      programme=u'vi %s #delete malicious entry' % path)
                         malice = True
             return suspicious, malice
         except:
             return suspicious, malice
 
     def run(self):
-        print(u'\n开始恶意后门类安全扫描')
-        file_write(u'\n开始后门类安全扫描\n')
+        print(u'\n begin backdoor scan')
+        file_write(u'\nbegin backdoor scan\n')
 
-        string_output(u' [1]LD_PRELOAD 后门检测')
+        string_output(u' [1] LD_PRELOAD backdoor check')
         suspicious, malice = self.check_LD_PRELOAD()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [2]LD_AOUT_PRELOAD 后门检测')
+        string_output(u' [2] LD_AOUT_PRELOAD backdoor check')
         suspicious, malice = self.check_LD_AOUT_PRELOAD()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [3]LD_ELF_PRELOAD 后门检测')
+        string_output(u' [3] LD_ELF_PRELOAD backdoor check')
         suspicious, malice = self.check_LD_ELF_PRELOAD()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [4]LD_LIBRARY_PATH 后门检测')
+        string_output(u' [4] LD_LIBRARY_PATH backdoor check')
         suspicious, malice = self.check_LD_LIBRARY_PATH()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [5]ld.so.preload 后门检测')
+        string_output(u' [5] ld.so.preload backdoor check')
         suspicious, malice = self.check_ld_so_preload()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [6]PROMPT_COMMAND 后门检测')
+        string_output(u' [6] PROMPT_COMMAND backdoor check')
         suspicious, malice = self.check_PROMPT_COMMAND()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [7]cron定时任务后门检测')
+        string_output(u' [7] cron job backdoor check')
         suspicious, malice = self.check_cron()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [8]未知环境变量 后门检测')
+        string_output(u' [8] unknown environment variable backdoor check')
         suspicious, malice = self.check_export()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [9]ssh 后门检测')
+        string_output(u' [9] ssh backdoor check')
         suspicious, malice = self.check_SSH()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [10]SSH wrapper 后门检测')
+        string_output(u' [10] SSH wrapper backdoor check')
         suspicious, malice = self.check_SSHwrapper()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [11]inetd.conf 后门检测')
+        string_output(u' [11] inetd.conf backdoor check')
         suspicious, malice = self.check_inetd()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [12]xinetd.conf 后门检测')
+        string_output(u' [12] xinetd.conf backdoor check')
         suspicious, malice = self.check_xinetd()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [13]setuid 后门检测')
+        string_output(u' [13] setuid backdoor check')
         suspicious, malice = self.check_setuid()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [14]系统启动项后门检测')
+        string_output(u' [14] system startup backdoor check')
         suspicious, malice = self.check_startup()
         result_output_tag(suspicious, malice)
 
         # 结果内容输出到文件
-        result_output_file(u'常规后门检测')
+        result_output_file(self.name)
 
 
 if __name__ == '__main__':

@@ -14,7 +14,7 @@ from subprocess import Popen, PIPE
 class Log_Analysis:
     def __init__(self):
         self.log_malware = []
-        self.name = u'日志类安全检测'
+        self.name = u'Log_Analysis'
 
     # wtmp日志登陆分析，排查境外IP的登陆日志
     def check_wtmp(self):
@@ -33,9 +33,9 @@ class Log_Analysis:
                     if ips[0] != '(': continue
                     ip = ips.replace('(', '').replace(')', '').replace('\n', '')
                     if check_ip(ip):
-                        malice_result(self.name, u'wtmp登陆历史排查', u'/var/log/wtmp', '', u'境外IP使用%s登陆主机：%s' % (user, ip),
-                                      u'[1]who /var/log/wtmp', u'可疑', time, user,
-                                      programme=u'passwd %s #更改%s用户密码' % (user, user))
+                        malice_result(self.name, u'wtmp logon history check ', u'/var/log/wtmp', '', u'oversea ip use %s logon：%s' % (user, ip),
+                                      u'[1]who /var/log/wtmp', u'suspicious', time, user,
+                                      programme=u'passwd %s #change %s user/password' % (user, user))
                         suspicious = True
             return suspicious, malice
         except:
@@ -57,8 +57,8 @@ class Log_Analysis:
                     if ips[0] != '(': continue
                     ip = ips.replace('(', '').replace(')', '').replace('\n', '')
                     if check_ip(ip):
-                        malice_result(self.name, u'utmp登陆历史排查', u'/run/utmp', '', u'境外IP使用%s登陆主机：%s' % (user, ip),
-                                      u'[1]who', u'可疑', time, user, programme=u'passwd %s #更改%s用户密码' % (user, user))
+                        malice_result(self.name, u'utmp logon history check', u'/run/utmp', '', u'oversea IP use %s logon：%s' % (user, ip),
+                                      u'[1]who', u'suspicious', time, user, programme=u'passwd %s #change %s user/password' % (user, user))
                         suspicious = True
             return suspicious, malice
         except:
@@ -78,9 +78,9 @@ class Log_Analysis:
                     user = lastlog.split(' ')[0].strip()
                     ip = lastlog.split(' ')[1].replace(' ', '').replace('\n', '')
                     if check_ip(ip):
-                        malice_result(self.name, u'lastlog登陆历史排查', u'/var/log/lastlog', '',
-                                      u'境外IP使用%s登陆主机：%s' % (user, ip), u'[1]who', u'可疑', "", user,
-                                      programme=u'passwd %s #更改%s用户密码' % (user, user))
+                        malice_result(self.name, u'lastlog logon check ', u'/var/log/lastlog', '',
+                                      u'oversea IP use %s logon：%s' % (user, ip), u'[1]who', u'suspicious', "", user,
+                                      programme=u'passwd %s #change %s account/password' % (user, user))
                         suspicious = True
             return suspicious, malice
         except:
@@ -97,31 +97,31 @@ class Log_Analysis:
                     time = os.popen('date -d ' + correct_baopo_infos[
                         'time'] + " '+%Y-%m-%d %H:%M:%S' 2>/dev/null").read().splitlines()
                     ip = correct_baopo_infos['ip']
-                    malice_result(self.name, u'secure日志排查', u'/var/log/secure', '',
-                                  u'主机SSH被外部爆破且成功登陆，时间：%s，ip：%s，用户：%s' % (time, ip, user), u'[1]cat /var/secure', u'风险',
-                                  time, user, programme=u'passwd %s #更改%s用户密码' % (user, user))
+                    malice_result(self.name, u'secure log check', u'/var/log/secure', '',
+                                  u'SSH exploited and login success ，time：%s，ip：%s，user：%s' % (time, ip, user), u'[1]cat /var/secure', u'risk',
+                                  time, user, programme=u'passwd %s #change %s user/password' % (user, user))
                     malice = True
             return suspicious, malice
         except:
             return suspicious, malice
 
     def run(self):
-        print(u'\n开始日志类安全扫描')
-        file_write(u'\n开始日志类安全扫描\n')
+        print(u'\n begin log scan')
+        file_write(u'\n begin log scan\n')
 
-        string_output(u' [1]secure日志安全扫描')
+        string_output(u' [1] ssh log check')
         suspicious, malice = self.check_sshlog()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [2]wtmp日志日志安全扫描')
+        string_output(u' [2] wtmp check ')
         suspicious, malice = self.check_wtmp()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [3]utmp日志日志安全扫描')
+        string_output(u' [3] utmp check')
         suspicious, malice = self.check_utmp()
         result_output_tag(suspicious, malice)
 
-        string_output(u' [4]lastlog日志日志安全扫描')
+        string_output(u' [4] lastlog check')
         suspicious, malice = self.check_lastlog()
         result_output_tag(suspicious, malice)
 
