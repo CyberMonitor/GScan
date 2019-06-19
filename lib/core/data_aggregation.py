@@ -41,7 +41,7 @@ class Data_Aggregation:
         # 写结果文件到db
         with open(DB_PATH, 'w') as f:
             for info in self.result_infos:
-                hash_txt = info['checkname'] + info[vulname] + info['file'] + info['pid'] + info['mtime'] + info['minfo']
+                hash_txt = info['checkname'] + info['vulname'] + info['file'] + info['pid'] + info['mtime'] + info['minfo']
                 md5obj = hashlib.md5()
                 md5obj.update(hash_txt.encode("utf8"))
                 hashinfo = md5obj.hexdigest()
