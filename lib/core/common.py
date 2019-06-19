@@ -154,7 +154,7 @@ def malice_result(checkname, vulname, file, pid, info, consult, level, mtime='',
     #malice_info = {u'检测项': checkname, u'风险名称': vulname, u'异常文件': file, u'进程PID': pid, u'异常时间': mtime, u'所属用户': user,
     #               u'异常信息': ' '.join(info.split()), u'手工排查确认': consult, u'风险级别': level, u'处理方案': programme}
     malice_info = {'checkname': checkname, 'vulname': vulname, 'file': file, 'pid': pid, 'mtime': mtime, 'user': user,
-                   'info': ' '.join(info.split()), 'consult': consult, 'level': level, 'programme': programme}
+                   'minfo': ' '.join(info.split()), 'consult': consult, 'level': level, 'programme': programme}
     result_info = get_value('RESULT_INFO')
     result_info.append(malice_info)
     set_value('RESULT_INFO', result_info)
@@ -166,7 +166,7 @@ def result_output_file(tag):
     RESULT_INFO = get_value('RESULT_INFO')
     info = []
     for result in RESULT_INFO:
-        if result[u'检测项'] == tag:
+        if result[u'checkname'] == tag:
             info.append(result)
     if len(info) > 0:
         new = reRepeat(info)
