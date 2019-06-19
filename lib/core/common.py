@@ -5,9 +5,6 @@ from imp import reload
 from lib.core.ip.ip import *
 from lib.core.globalvar import *
 
-# 作者：咚咚呛
-# 功能：调用的公共库
-# 版本：v0.1
 
 
 if sys.version_info < (3, 0):
@@ -154,8 +151,10 @@ def malice_result(checkname, vulname, file, pid, info, consult, level, mtime='',
         mtime_temp, user_temp = get_process_start_time(pid)
     if not mtime: mtime = mtime_temp
     if not user: user = user_temp
-    malice_info = {u'检测项': checkname, u'风险名称': vulname, u'异常文件': file, u'进程PID': pid, u'异常时间': mtime, u'所属用户': user,
-                   u'异常信息': ' '.join(info.split()), u'手工排查确认': consult, u'风险级别': level, u'处理方案': programme}
+    #malice_info = {u'检测项': checkname, u'风险名称': vulname, u'异常文件': file, u'进程PID': pid, u'异常时间': mtime, u'所属用户': user,
+    #               u'异常信息': ' '.join(info.split()), u'手工排查确认': consult, u'风险级别': level, u'处理方案': programme}
+    malice_info = {'checkname': checkname, 'vulname': vulname, 'file': file, 'pid': pid, 'mtime': mtime, 'user': user,
+                   'info': ' '.join(info.split()), 'consult': consult, 'level': level, 'programme': programme}
     result_info = get_value('RESULT_INFO')
     result_info.append(malice_info)
     set_value('RESULT_INFO', result_info)
@@ -183,11 +182,11 @@ def result_output_file(tag):
 # 分析结果输出，用于用户视觉效果
 def result_output_tag(suspicious=False, malice=False, skip=False):
     if malice:
-        pringf(u'存在风险', malice=True)
+        pringf('exist risk', malice=True)
     elif suspicious and (not malice):
-        pringf(u'警告', suspicious=True)
+        pringf('Warning', suspicious=True)
     elif skip and not suspicious and not malice:
-        pringf(u'跳过', suspicious=True)
+        pringf(u'skip', suspicious=True)
     else:
         pringf(u'OK', security=True)
 
@@ -333,16 +332,16 @@ def analysis_strings(contents):
         content = contents.replace('\n', '')
         # 反弹shell类
         if check_shell(content):
-            return u"反弹shell类：%s" % content
+            return "reverse shell type：%s" % content
         # 境外IP操作类
         elif check_contents_ip(content):
-            return u"境外ip操作类：%s" % content
+            return "oversea ip type：%s" % content
         else:
             for file in content.split(' '):
                 if not os.path.exists(file): continue
                 if os.path.isdir(file): continue
                 malware = analysis_file(file)
-                if malware: return u"引用恶意文件%s，可疑内容：%s" % (file, malware)
+                if malware: return "malware file: %s，suspicious：%s" % (file, malware)
         return ""
     except:
         return ""
@@ -368,19 +367,19 @@ def analysis_file(file, mode='fast'):
         time.sleep(0.01)
         for str in strings:
             if check_shell(str):
-                if DEBUG: print(u'文件：%s ，bash shell :%s' % file, str)
-                return u"反弹shell类：%s" % str
+                if DEBUG: print('file：%s ，bash shell :%s' % file, str)
+                return "reverse shell type：%s" % str
             # 完全扫描会带入恶意特征扫描
             if SCAN_TYPE == 2:
                 time.sleep(0.01)
                 for malware in malware_infos:
                     if malware.replace('\n', '') in str:
-                        if DEBUG: print(u'文件：%s ，恶意特征 :%s' % file, malware)
-                        return u"恶意特征类：%s，匹配规则:%s" % (str, malware)
+                        if DEBUG: print('file：%s ，malicious :%s' % file, malware)
+                        return "malicious type：%s，match rule:%s" % (str, malware)
             if Overseas: continue
             if check_contents_ip(str):
-                if DEBUG: print(u'文件：%s ，境外IP操作类 :%s' % file, str)
-                return u"境外ip操作类：%s" % str
+                if DEBUG: print('file：%s ，oversea ip type :%s' % file, str)
+                return "oversea ip type：%s" % str
         return ""
     except:
         return ""

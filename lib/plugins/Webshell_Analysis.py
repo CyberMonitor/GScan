@@ -20,7 +20,7 @@ from lib.core.globalvar import *
 
 class Webshell_Analysis:
     def __init__(self):
-        self.name = u'Webshell安全检测'
+        self.name = 'Webshell_Analysis'
         # WEB目录
         self.webroot_list = []
         # yara的webshell规则
@@ -60,8 +60,8 @@ class Webshell_Analysis:
                     matches = self.yararule.match(data=fp.read())
                     if len(matches):
                         self.webshell_list.append(file)
-                        malice_result(self.name, u'webshell安全检测', file, '', u'文件匹配上webshell特征，规则：%s' % matches[0],
-                                      u'[1]cat %s' % file, u'风险',programme=u'rm %s #删除webshell文件' % file)
+                        malice_result(self.name, 'Webshell_Analysis', file, '', 'file match webshell signature，rule：%s' % matches[0],
+                                      u'[1]cat %s' % file, 'risk',programme='rm %s #delete webshell file' % file)
                 except:
                     continue
 
@@ -105,10 +105,10 @@ class Webshell_Analysis:
             return suspicious, malice, skip
 
     def run(self):
-        print(u'\n开始Webshell安全扫描')
-        file_write(u'\n开始Webshell安全扫描\n')
+        print(u'\nopen Webshell scan')
+        file_write(u'\nopen Webshell scan\n')
 
-        string_output(u' [1]Webshell安全扫描')
+        string_output(u' [1]Webshell scan')
         self.getWebRoot()
         suspicious, malice, skip = self.init_scan()
         result_output_tag(suspicious, malice, skip)
@@ -120,6 +120,6 @@ class Webshell_Analysis:
 if __name__ == '__main__':
     info = Webshell_Analysis()
     info.run()
-    print(u"Webshell文件检查异常如下：")
+    print(u"Webshell file check in the following ：")
     for info in info.webshell_list:
         print(info)

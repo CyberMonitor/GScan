@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# 作者：咚咚呛
-# 全局参数管理模块
+
 
 def init():
     global _global_dict
